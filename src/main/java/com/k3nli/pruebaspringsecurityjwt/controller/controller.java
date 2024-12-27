@@ -26,23 +26,8 @@ public class controller {
     }
     
     @GetMapping("secure")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public String secure () {
         return "hello secure world";
-    }
-
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<Map<String, Object>> handleGenericException (Exception exception, HttpServletRequest request) {
-        Map<String, Object> apiError = new HashMap<>();
-        apiError.put("message", exception.getLocalizedMessage());
-        apiError.put("timestamp", new Date().toString());
-        apiError.put("url", request.getRequestURL().toString());
-        apiError.put("http-metod", request.getMethod());
-
-        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
-        if (exception instanceof AccessDeniedException) {
-            status = HttpStatus.FORBIDDEN;
-        }
-        return ResponseEntity.status(status).body(apiError);
     }
 }
