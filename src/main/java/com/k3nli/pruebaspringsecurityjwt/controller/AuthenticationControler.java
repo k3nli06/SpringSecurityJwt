@@ -9,6 +9,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.k3nli.pruebaspringsecurityjwt.DTO.*;
 import com.k3nli.pruebaspringsecurityjwt.service.AuthenticationService;
 
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.security.SignatureException;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -18,14 +22,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class AuthenticationControler {
     @Autowired
     AuthenticationService authenticationService;
-    
+
     @PostMapping("login")
-    public ResponseEntity<AuthenticationResponseDto> login (@RequestBody LoginDto loginDto) {   
+    public ResponseEntity<AuthenticationResponseDto> login(@RequestBody LoginDto loginDto)
+            throws SignatureException, ExpiredJwtException, MalformedJwtException, IllegalArgumentException {
         return ResponseEntity.ok(authenticationService.login(loginDto));
     }
-    
+
     @PostMapping("register")
     public ResponseEntity<AuthenticationResponseDto> register(@RequestBody RegisterDto registerDto) {
-        return ResponseEntity.ok(authenticationService.register(registerDto));    
+        return ResponseEntity.ok(authenticationService.register(registerDto));
     }
 }
